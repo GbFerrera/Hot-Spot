@@ -12,6 +12,9 @@ RUN npm ci
 # Copiar código da aplicação
 COPY . .
 
+# Configurar para ambiente de produção
+ENV NODE_ENV=production
+
 # Expor porta do servidor
 EXPOSE 8080
 
