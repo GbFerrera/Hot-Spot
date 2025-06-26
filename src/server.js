@@ -8,8 +8,13 @@ const routes = require("./routes")
 
 const app = express()
 
-// Enable CORS for all requests
-app.use(cors())
+// Enable CORS for all requests with permissive settings
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allow all common HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'], // Allow common headers
+  credentials: false // Set to true if you need to send cookies
+}))
 
 app.use(express.json())
 app.use(routes)
