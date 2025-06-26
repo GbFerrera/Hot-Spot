@@ -8,13 +8,30 @@ const routes = require("./routes")
 
 const app = express()
 
-// Enable CORS for all requests with permissive settings
+// Enable CORS for all requests with maximum permissive settings
 app.use(cors({
   origin: '*', // Allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allow all common HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'], // Allow common headers
-  credentials: false // Set to true if you need to send cookies
+  allowedHeaders: '*', // Allow all headers
+  exposedHeaders: ['Content-Length', 'X-Requested-With', 'Authorization', 'Content-Type'],
+  credentials: true, // Allow credentials
+  maxAge: 86400 // Cache preflight requests for 24 hours
 }))
+
+// Additional headers for cross-origin requests
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+})
 
 app.use(express.json())
 app.use(routes)
