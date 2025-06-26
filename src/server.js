@@ -10,9 +10,19 @@ const app = express()
 
 // Configuração manual para permitir qualquer tipo de conexão
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  // Permitir especificamente o IP 177.67.106.58 e qualquer outra origem
+  const allowedOrigins = ['http://177.67.106.58', 'https://177.67.106.58', '*'];
+  const origin = req.headers.origin;
+  
+  if (origin && (allowedOrigins.includes(origin) || origin === 'http://177.67.106.58')) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', '*');
+  }
+  
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
   
   // Responder imediatamente às solicitações OPTIONS
   if (req.method === 'OPTIONS') {
