@@ -3,29 +3,18 @@ require('express-async-errors')
 const ErrorApp = require("./utils/errorApp")
 
 const express = require("express")
-const cors = require("cors")
+// Removido o middleware CORS
 const routes = require("./routes")
 
 const app = express()
 
-// Enable CORS for all requests with maximum permissive settings
-app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allow all common HTTP methods
-  allowedHeaders: '*', // Allow all headers
-  exposedHeaders: ['Content-Length', 'X-Requested-With', 'Authorization', 'Content-Type'],
-  credentials: true, // Allow credentials
-  maxAge: 86400 // Cache preflight requests for 24 hours
-}))
-
-// Additional headers for cross-origin requests
+// Configuração manual para permitir qualquer tipo de conexão
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
   
-  // Handle preflight OPTIONS requests
+  // Responder imediatamente às solicitações OPTIONS
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
